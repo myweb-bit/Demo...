@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Devrana Express Siwan | देवरानी एक्सप्रेस सीवान</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SwiperJS Carousel Styling -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+    <style>
+        :root {
+            --primary: #FFB300; 
+            --primary-glow: rgba(255, 179, 0, 0.3);
+            --bg-dark: #0F172A; 
+            --card-bg: #1E293B;
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-light: #F8FAFC;
+            --text-muted: #94A3B8;
+            --pure-veg-green: #22C55E;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg-dark); 
+            color: var(--text-light); 
+            padding-bottom: 80px; 
+            overflow-x: hidden; 
+            scroll-behavior: smooth; 
+        }
+
+        .app-header {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 65px;
+            background: rgba(15, 23, 42, 0.95); 
+            backdrop-filter: blur(12px);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 0 20px; 
+            z-index: 1000; 
+            border-bottom: 1px solid var(--card-border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        .app-header h1 { 
+            font-size: 1.15rem; 
+            color: var(--primary); 
+            font-weight: 700; 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pure-veg-badge {
+            border: 1px solid var(--pure-veg-green);
+            padding: 2px 4px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pure-veg-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--pure-veg-green);
+            border-radius: 50%;
+        }
+
+        .header-actions i { 
+            font-size: 1.25rem; 
+            margin-left: 18px; 
+            color: var(--text-light); 
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .header-actions i:hover {
+            color: var(--primary);
+        }
+
+        .page { 
+            display: none; 
+            padding-top: 65px; 
+            animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+
+        .page.active { 
+            display: block; 
+        }
+
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(12px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        .home-swiper { width: 100%; height: 55vh; min-height: 360px; }
+        .hero-slide { position: relative; width: 100%; height: 100%; }
+        .hero-slide img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-overlay { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: linear-gradient(to top, var(--bg-dark) 5%, rgba(15,23,42,0.3) 60%, rgba(0,0,0,0.5) 100%); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: flex-end; 
+            padding: 25px 20px; 
+        }
+        
+        .hero-title { font-size: 2.1rem; font-weight: 800; color: #fff; margin-bottom: 4px; line-height: 1.15; }
+        .hero-subtitle { font-size: 0.95rem; color: #cbd5e1; margin-bottom: 12px; font-weight: 400; }
+        
+        .rating-badge { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 6px; 
+            background: rgba(15, 23, 42, 0.85); 
+            backdrop-filter: blur(8px);
+            padding: 6px 14px; 
+            border-radius: 20px; 
+            font-size: 0.85rem; 
+            border: 1px solid var(--primary); 
+            margin-bottom: 12px; 
+            width: fit-content;
+        }
+
+        .section-heading { 
+            font-size: 1.3rem; 
+            font-weight: 700; 
+            padding: 25px 20px 12px; 
+            color: #fff; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+
+        .info-strip { display: flex; gap: 12px; padding: 10px 20px; overflow-x: auto; scrollbar-width: none; }
+        .info-strip::-webkit-scrollbar { display: none; }
+        
+        .info-card { 
+            min-width: 150px; 
+            background: var(--card-bg); 
+            padding: 14px; 
+            border-radius: 14px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 4px; 
+            border: 1px solid var(--card-border); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .info-card i { color: var(--primary); font-size: 1.25rem; margin-bottom: 2px; }
+
+        .gallery-strip { display: flex; gap: 14px; padding: 0 20px 20px; overflow-x: auto; scrollbar-width: none; }
+        .gallery-strip::-webkit-scrollbar { display: none; }
+        .gallery-strip img { 
+            min-width: 260px; 
+            height: 170px; 
+            border-radius: 16px; 
+            object-fit: cover; 
+            border: 1px solid var(--card-border); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .home-contact { 
+            margin: 20px; 
+            background: linear-gradient(135deg, #1E293B, #0F172A); 
+            padding: 22px; 
+            border-radius: 18px; 
+            border-left: 5px solid var(--primary); 
+            border-top: 1px solid var(--card-border);
+            border-right: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        .home-contact p { 
+            margin-bottom: 12px; 
+            font-size: 0.9rem; 
+            display: flex; 
+            align-items: flex-start; 
+            gap: 12px; 
+            color: var(--text-light); 
+            line-height: 1.5;
+        }
+
+        .home-contact p:last-child { margin-bottom: 0; }
+        .home-contact i { color: var(--primary); font-size: 1.1rem; width: 20px; margin-top: 2px; text-align: center; }
+
+        .action-buttons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 0 20px;
+            margin-top: 10px;
+            margin-bottom: 25px;
+        }
+
+        .btn-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 10px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+        }
+
+        .btn-whatsapp { background: #25D366; color: #fff; }
+        .btn-call { background: var(--primary); color: #000; }
+        .btn-maps { 
+            grid-column: span 2; 
+            background: #3B82F6; 
+            color: #fff; 
+            padding: 14px;
+        }
+
+        .btn-action:active { transform: scale(0.98); }
+
+        .menu-header { padding: 20px 20px 10px; text-align: center; }
+        .menu-header h2 { font-size: 1.8rem; color: var(--primary); font-weight: 800; }
+        
+        .category-scroll-bar {
+            display: flex;
+            gap: 8px;
+            padding: 10px 20px 15px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            position: sticky;
+            top: 65px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 900;
+            border-bottom: 1px solid var(--card-border);
+        }
+        .category-scroll-bar::-webkit-scrollbar { display: none; }
+
+        .cat-chip {
+            white-space: nowrap;
+            background: var(--card-bg);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            border: 1px solid var(--card-border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cat-chip.active {
+            background: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+            box-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        .menu-category-title { 
+            padding: 25px 20px 12px; 
+            font-size: 1.2rem; 
+            font-weight: 700; 
+            color: var(--primary); 
+            border-bottom: 1px solid rgba(255,255,255,0.08); 
+            margin-bottom: 15px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.8px; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-category-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 18px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .food-list { display: flex; flex-direction: column; gap: 14px; padding: 0 20px; }
+        
+        .food-item { 
+            display: flex; 
+            background: var(--card-bg); 
+            padding: 14px; 
+            border-radius: 14px; 
+            gap: 14px; 
+            align-items: center; 
+            position: relative; 
+            border: 1px solid var(--card-border); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .food-info { flex: 1; padding-right: 75px; }
+        .food-info h4 { font-size: 0.98rem; font-weight: 600; margin-bottom: 4px; color: #fff; }
+        .food-info p { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px; line-height: 1.3; }
+        .food-price { font-weight: 700; color: var(--primary); font-size: 0.95rem; }
+        
+        .add-btn { 
+            position: absolute; 
+            right: 14px; 
+            bottom: 14px; 
+            background: rgba(255, 179, 0, 0.12); 
+            color: var(--primary); 
+            border: 1px solid var(--primary); 
+            padding: 6px 16px; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            font-size: 0.82rem; 
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .add-btn:active {
+            transform: scale(0.92);
+        }
+
+        .offer-card {
+            background: linear-gradient(135deg, #1E293B, #0F172A);
+            border: 1px solid var(--card-border);
+            border-left: 5px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+        }
+
+        .offer-card h3 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .offer-card p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .about-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .about-card h3 {
+            color: var(--primary);
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+        }
+
+        .bottom-nav {
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 65px;
+            background: rgba(15, 23, 42, 0.96); 
+            backdrop-filter: blur(16px);
+            display: flex; 
+            justify-content: space-around; 
+            align-items: center;
+            border-top: 1px solid var(--card-border); 
+            z-index: 1000;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+        }
+
+        .nav-item { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            color: var(--text-muted); 
+            font-size: 0.72rem; 
+            gap: 4px; 
+            transition: all 0.25 ease; 
+            cursor: pointer; 
+            width: 25%;
+            padding: 6px 0;
+        }
+
+        .nav-item i { font-size: 1.3rem; transition: transform 0.2s ease; }
+        .nav-item.active { color: var(--primary); font-weight: 600; }
+        .nav-item.active i { transform: translateY(-3px); }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <h1>
+            <span>Devrana Express</span>
+            <span class="pure-veg-badge" title="Pure Veg Restaurant">
+                <span class="pure-veg-dot"></span>
+            </span>
+        </h1>
+        <div class="header-actions">
+            <i class="fas fa-search" onclick="switchPage('page-menu', document.getElementById('nav-menu'))" title="Search Menu"></i>
+            <a href="https://maps.app.goo.gl/yuW4vWLwdkz2KbYe7?g_st=ac" target="_blank" style="color:inherit;"><i class="fas fa-map-marker-alt" title="Location"></i></a>
+        </div>
+    </header>
+
+    <div id="page-home" class="page active">
+        
+        <!-- Swiper Hero Carousel -->
+        <div class="swiper home-swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide hero-slide">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" alt="Devrana Express Interior Ambience">
+                    <div class="hero-overlay">
+                        <div class="rating-badge">
+                            <i class="fas fa-star" style="color: gold;"></i> 
+                            <strong>4.3</strong> (54+ Reviews)
+                        </div>
+                        <h1 class="hero-title">Devrana Express</h1>
+                        <p class="hero-subtitle">Downtown City Square Mall, Siwan</p>
+                    </div>
+                </div>
+                <div class="swiper-slide hero-slide">
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80" alt="Delicious Food Feast">
+                    <div class="hero-overlay">
+                        <div class="rating-badge">
+                            <i class="fas fa-leaf" style="color: var(--pure-veg-green);"></i> 
+                            Eclectic Dining Experience
+                        </div>
+                        <h1 class="hero-title">Delicious Veg Delights</h1>
+                        <p class="hero-subtitle">North Indian • Tandoor • Chinese • South Indian</p>
+                    </div>
+                </div>
+                <div class="swiper-slide hero-slide">
+                    <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&w=800&q=80" alt="Clean and Spacious Ambience">
+                    <div class="hero-overlay">
+                        <div class="rating-badge"><i class="fas fa-sparkles" style="color: var(--primary);"></i> Premium Ambience</div>
+                        <h1 class="hero-title">Spacious & Clean Dining</h1>
+                        <p class="hero-subtitle">Perfect for Family & Friends</p>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+
+        <!-- Quick Info Strip -->
+        <div class="info-strip">
+            <div class="info-card">
+                <i class="fas fa-clock"></i>
+                <span style="font-size:0.75rem; color:var(--text-muted);">Timing</span>
+                <strong style="font-size:0.85rem;">Closes 11:00 PM</strong>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-wallet"></i>
+                <span style="font-size:0.75rem; color:var(--text-muted);">Cost for Two</span>
+                <strong style="font-size:0.85rem;">₹200 - ₹1,000</strong>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-building"></i>
+                <span style="font-size:0.75rem; color:var(--text-muted);">Floor</span>
+                <strong style="font-size:0.85rem;">2nd Floor</strong>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-map-marker-alt"></i>
+                <span style="font-size:0.75rem; color:var(--text-muted);">City</span>
+                <strong style="font-size:0.85rem;">Siwan, Bihar</strong>
+            </div>
+        </div>
+
+        <!-- Gallery Section -->
+        <div class="section-heading">Restaurant Gallery</div>
+        <div class="gallery-strip">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80" alt="Interior Seating">
+            <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=600&q=80" alt="Modern Restaurant View">
+            <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&w=600&q=80" alt="Dining Tables">
+            <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=600&q=80" alt="Food Spread">
+        </div>
+
+        <!-- Reach Out / Contact Details -->
+        <div class="section-heading">Contact & Location Details</div>
+        <div class="home-contact">
+            <p>
+                <i class="fas fa-map-pin"></i> 
+                <span><strong>Address:</strong> 2nd Floor, Tarwara More, Downtown City Square Mall, Siwan, Bihar 841226</span>
+            </p>
+            <p>
+                <i class="fas fa-phone-alt"></i> 
+                <span><strong>Call Us:</strong> +91 088099 85776</span>
+            </p>
+            <p>
+                <i class="fab fa-whatsapp" style="color: #25D366;"></i> 
+                <span><strong>WhatsApp:</strong> +91 088099 85776</span>
+            </p>
+            <p>
+                <i class="fas fa-clock"></i> 
+                <span><strong>Hours:</strong> Open Daily (Closes at 11:00 PM)</span>
+            </p>
+        </div>
+
+        <!-- Quick Action Buttons -->
+        <div class="action-buttons-grid">
+            <a href="https://wa.me/918809985776" target="_blank" class="btn-action btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+            <a href="tel:08809985776" class="btn-action btn-call">
+                <i class="fas fa-phone-alt"></i> Call Now
+            </a>
+            <a href="https://maps.app.goo.gl/yuW4vWLwdkz2KbYe7?g_st=ac" target="_blank" class="btn-action btn-maps">
+                <i class="fas fa-directions"></i> Open Location in Google Maps
+            </a>
+        </div>
+    </div>
+
+    <div id="page-menu" class="page">
+        <div class="menu-header">
+            <h2>Our Complete Menu</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Authentic flavors curated from Devrana Express</p>
+        </div>
+
+        <!-- Category Horizontal Filter Chip Bar -->
+        <div class="category-scroll-bar">
+            <div class="cat-chip active" onclick="scrollToCategory('cat-soups', this)">Soups</div>
+            <div class="cat-chip" onclick="scrollToCategory('cat-chaat', this)">Chaat Street</div>
+            <div class="cat-chip" onclick="scrollToCategory('cat-tandoor', this)">Tandoor Junction</div>
+            <div class="cat-chip" onclick="scrollToCategory('cat-chinese', this)">Desi Chinese</div>
+            <div class="cat-chip" onclick="scrollToCategory('cat-noodles', this)">Rice & Noodles</div>
+            <div class="cat-chip" onclick="scrollToCategory('cat-wok-combo', this)">Desi Wok Combo</div>
+            <div class="cat-chip" onclick="scrollToCategory('cat-main', this)">A La Carte</div>
+            <div class="cat-chip" onclick="scrollToCategory('cat-dal', this)">Dal</div>
+            <div class="cat-chip" onclick="scrollToCategory('cat-biryani', this)">Biryani & Rice</div>
+            <div class="cat-chip" onclick="scrollToCategory('cat-salad', this)">Salad & Raita</div>
+            <div class="cat-chip" onclick="scrollToCategory('cat-combos', this)">Combos & Thali</div>
+            <div class="cat-chip" onclick="scrollToCategory('cat-south', this)">South Indian Se</div>
+            <div class="cat-chip" onclick="scrollToCategory('cat-breads', this)">Breads & Paratha</div>
+        </div>
+
+        <!-- 1. SOUPS -->
+        <div id="cat-soups" class="menu-category-title">Soups</div>
+        <div class="food-list">
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Tomato Soup</h4><p>Classic rich and creamy tomato soup with spices.</p><div class="food-price">₹150/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Sweet Corn Soup</h4><p>Mild and comforting soup with sweet corn kernels.</p><div class="food-price">₹150/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Hot and Sour Soup</h4><p>Spicy and tangy Chinese style soup.</p><div class="food-price">₹150/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Manchow Soup</h4><p>Loaded with veggies and served with crispy noodles.</p><div class="food-price">₹150/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Lung Fung Soup</h4><p>Flavorful broth-based healthy soup.</p><div class="food-price">₹150/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Lemon Coriander Soup</h4><p>Refreshing soup with fresh lemon and coriander leaves.</p><div class="food-price">₹150/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Creamy Mushroom Soup</h4><p>Rich and silky mushroom broth with cream.</p><div class="food-price">₹150/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+        </div>
+
+        <!-- 2. CHAAT STREET -->
+        <div id="cat-chaat" class="menu-category-title">Chaat Street</div>
+        <div class="food-list">
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Aloo Tikki with Chole</h4><p>Crispy potato tikki served with spicy chickpeas.</p><div class="food-price">₹120/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Bhalla Papdi</h4><p>Soft lentil dumplings and crispy papdi with curd & chutney.</p><div class="food-price">₹70/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Katori Chaat</h4><p>Crispy bowl filled with spiced potatoes, sprouts and curd.</p><div class="food-price">₹130/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Samosa</h4><p>Crispy fried pastry stuffed with spiced potato filling.</p><div class="food-price">₹25/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Pao Bhaji</h4><p>Butter-loaded spiced veg mash with toasted butter pao.</p><div class="food-price">₹140/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Chole Bhature</h4><p>Fluffy bhaturas served with authentic spiced chole.</p><div class="food-price">₹180/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+        </div>
+
+        <!-- 3. TANDOOR JUNCTION -->
+        <div id="cat-tandoor" class="menu-category-title">Tandoor Junction</div>
+        <div class="food-list">
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Dahi Kebab</h4><p>Crispy outside, melt-in-mouth kebabs made with hung curd.</p><div class="food-price">₹280/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Hara Bhara Kebab</h4><p>Spinach and green vegetable kebabs, shallow fried.</p><div class="food-price">₹280/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Stuffed Aloo</h4><p>Potatoes stuffed with spiced & dry fruits filling, tandoor roasted.</p><div class="food-price">₹310/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Veg Seekh Kebab</h4><p>Minced vegetable kebabs blended with herbs on skewers.</p><div class="food-price">₹290/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Malai Soya Chaap</h4><p>Creamy and mildly spiced soya chaap grilled to buttery finish.</p><div class="food-price">₹280/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Tandoori Soya Chaap</h4><p>Classic chaap marinated in tandoori spices and char-grilled.</p><div class="food-price">₹280/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Afghani Soya Chaap</h4><p>Soft chaap in rich Afghani marinade with subtle spices.</p><div class="food-price">₹280/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Bhatti De Mushroom</h4><p>Fresh mushrooms marinated in robust spices & slow-roasted.</p><div class="food-price">₹320/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Dahi Ke Sholey</h4><p>Golden fried rolls with a creamy hung-curd filling.</p><div class="food-price">₹320/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Achari Paneer Tikka</h4><p>Paneer marinated in tangy pickling spices and roasted.</p><div class="food-price">₹250/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Sashlik Paneer Tikka</h4><p>Paneer cubes grilled with bell peppers and onions.</p><div class="food-price">₹250/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Malai Paneer Tikka</h4><p>Creamy, mildly spiced paneer cooked till tender.</p><div class="food-price">₹270/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Veg Tandoori Platter</h4><p>Selection of paneer tikka, stuffed potatoes & kebabs.</p><div class="food-price">₹400/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Tandoori Sizzlers</h4><p>Sizzling platter of tandoori favorites served with sautéed veggies.</p><div class="food-price">₹400/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+        </div>
+
+        <!-- 4. DESI CHINESE -->
+        <div id="cat-chinese" class="menu-category-title">Desi Chinese</div>
+        <div class="food-list">
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Veg Manchurian</h4><p>Crispy veg balls in garlic soy sauce (Dry / Gravy).</p><div class="food-price">₹220 / ₹230</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Chilli Paneer</h4><p>Cottage cheese chunks in spicy sauce (Dry / Gravy).</p><div class="food-price">₹250 / ₹270</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Honey Chilli Potato</h4><p>Crispy potato fingers tossed in sweet chili honey glaze.</p><div class="food-price">₹220/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Chilli Potato</h4><p>Spicy fried potatoes tossed with peppers and onions.</p><div class="food-price">₹220/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Crispy Corn</h4><p>Deep-fried sweet corn tossed with Chinese seasoning.</p><div class="food-price">₹240/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Chilli Garlic Baby Corn</h4><p>Crispy baby corn in garlic chili sauce.</p><div class="food-price">₹260/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Veg Salt & Pepper</h4><p>Crispy vegetables seasoned with crushed black pepper & salt.</p><div class="food-price">₹220/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Paneer 65</h4><p>South-style spicy fried paneer cubes.</p><div class="food-price">₹280/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Paneer Majestic</h4><p>Chef's signature spicy coated fried paneer starter.</p><div class="food-price">₹280/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Spring Roll</h4><p>Crispy rolls filled with shredded seasoned vegetables.</p><div class="food-price">₹200/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+        </div>
+
+        <!-- 5. RICE & NOODLES -->
+        <div id="cat-noodles" class="menu-category-title">Rice & Noodles</div>
+        <div class="food-list">
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Vegetable Fried Rice</h4><p>Classic wok-tossed basmati rice with mixed veggies.</p><div class="food-price">₹180/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Chilli Garlic Fried Rice</h4><p>Spicy rice flavored with chili oil and garlic.</p><div class="food-price">₹210/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Veg Hakka Noodles</h4><p>Indo-Chinese street style tossed noodles.</p><div class="food-price">₹220/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Vegetable Noodles</h4><p>Delicious stir-fried noodles with farm fresh veggies.</p><div class="food-price">₹210/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Chilli Garlic Noodles</h4><p>Spicy noodles tossed with burnt garlic and chili paste.</p><div class="food-price">₹220/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+        </div>
+
+        <!-- 6. DESI WOK COMBO -->
+        <div id="cat-wok-combo" class="menu-category-title">Desi Wok Combo</div>
+        <div class="food-list">
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Manchurian + Fried Rice</h4><p>Tasty combo of veg manchurian and fried rice.</p><div class="food-price">Mini: ₹250 | Big: ₹380</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Chilli Paneer + Fried Rice</h4><p>Chilli paneer gravy served with vegetable fried rice.</p><div class="food-price">Mini: ₹280 | Big: ₹400</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Chilli Paneer + Noodles</h4><p>Chilli paneer served alongside Hakka noodles.</p><div class="food-price">Mini: ₹280 | Big: ₹400</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Manchurian + Noodles</h4><p>Crispy manchurian gravy with veg noodles.</p><div class="food-price">Mini: ₹260 | Big: ₹380</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Veg Hot Sauce + Fried Rice</h4><p>Exotic veggies in spicy red hot sauce with rice.</p><div class="food-price">Mini: ₹250 | Big: ₹360</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+        </div>
+
+        <!-- 7. A LA CARTE -->
+        <div id="cat-main" class="menu-category-title">A La Carte (Main Course)</div>
+        <div class="food-list">
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Paneer Butter Masala</h4><p>Soft paneer cubes in rich butter tomato gravy.</p><div class="food-price">₹320/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Paneer Lababdar</h4><p>Paneer in luscious gravy with grated cottage cheese.</p><div class="food-price">₹320/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Shahi Paneer</h4><p>Royal sweet and creamy cashew gravy paneer curry.</p><div class="food-price">₹350/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Kadhai Paneer</h4><p>Paneer cooked with bell peppers in spicy kadhai gravy.</p><div class="food-price">₹320/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Paneer Do Pyaza</h4><p>Delicious curry prepared with double onions and spices.</p><div class="food-price">₹330/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Teen Mirchi Ka Paneer</h4><p>Spicy paneer preparation with 3 varieties of chilies.</p><div class="food-price">₹330/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Palak Paneer</h4><p>Fresh spinach puree curry cooked with soft paneer cubes.</p><div class="food-price">₹330/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Malai Kofta</h4><p>Melt-in-mouth cottage cheese balls in silky white gravy.</p><div class="food-price">₹330/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Mix Veg</h4><p>Seasonal garden fresh vegetables tossed in dry spices.</p><div class="food-price">₹280/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Mushroom Masala</h4><p>Fresh button mushrooms cooked in onion-tomato masala.</p><div class="food-price">₹310/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Matar Mushroom</h4><p>Classic combo of sweet peas and mushrooms in rich gravy.</p><div class="food-price">₹310/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Hyderabadi Soya Chaap</h4><p>Spicy and aromatic soya chaap cooked Hyderabadi style.</p><div class="food-price">₹300/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Masaledar Chole</h4><p>North Indian style thick spiced chickpea gravy.</p><div class="food-price">₹300/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Pindi Chana</h4><p>Traditional Rawalpindi style dark spiced chickpeas.</p><div class="food-price">₹270/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Dum Aloo (Kashmiri / Banarasi)</h4><p>Slow cooked baby potatoes in rich spiced gravel.</p><div class="food-price">₹300 / ₹350</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Aloo Jeera</h4><p>Diced potatoes tempered with cumin seeds and spices.</p><div class="food-price">₹260/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+        </div>
+
+        <!-- 8. DAL -->
+        <div id="cat-dal" class="menu-category-title">Dal Specialties</div>
+        <div class="food-list">
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Dal Makhani</h4><p>Slow cooked black lentils with butter and cream.</p><div class="food-price">₹300/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Dal Devrana</h4><p>Chef's special rich house dal blend.</p><div class="food-price">₹320/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Dal Tadka</h4><p>Yellow lentils tempered with ghee, cumin & garlic.</p><div class="food-price">₹280/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Dal Fry</h4><p>Classic yellow dal cooked with aromatic spices.</p><div class="food-price">₹280/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+        </div>
+
+        <!-- 9. BIRYANI & RICE -->
+        <div id="cat-biryani" class="menu-category-title">Biryani & Rice</div>
+        <div class="food-list">
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Plain Rice</h4><p>Steamed fluffy basmati rice.</p><div class="food-price">₹200/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Jeera Rice</h4><p>Basmati rice tempered with cumin seeds and ghee.</p><div class="food-price">₹220/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Matar Pulao</h4><p>Fragrant basmati rice cooked with fresh green peas.</p><div class="food-price">₹220/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Veg Handi Biryani</h4><p>Slow-cooked layered aromatic rice with fresh vegetables.</p><div class="food-price">₹340/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+        </div>
+
+        <!-- 10. SALAD & RAITA -->
+        <div id="cat-salad" class="menu-category-title">Salad & Raita</div>
+        <div class="food-list">
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Green Salad</h4><p>Fresh sliced cucumbers, tomatoes, carrots and onions.</p><div class="food-price">₹120/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Pudina Raita</h4><p>Refreshing chilled curd blended with fresh mint.</p><div class="food-price">₹150/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Mix Veg Raita</h4><p>Yogurt with finely chopped onions, tomatoes & cucumbers.</p><div class="food-price">₹150/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Pineapple Raita</h4><p>Sweet and savory yogurt with juicy pineapple pieces.</p><div class="food-price">₹150/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Plain Raita</h4><p>Smoothly whipped seasoned yogurt.</p><div class="food-price">₹120/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Boondi Raita</h4><p>Chilled yogurt mixed with crispy chickpea pearls.</p><div class="food-price">₹150/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+        </div>
+
+        <!-- 11. COMBOS & THALI -->
+        <div id="cat-combos" class="menu-category-title">Combos & Thali</div>
+        <div class="food-list">
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Rajma + Rice (500ml)</h4><p>Comforting rajma curry served with steamed rice.</p><div class="food-price">₹260/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Dal Makhani + Rice (500ml)</h4><p>Rich Dal Makhani served with basmati rice.</p><div class="food-price">₹260/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Shahi Paneer + Rice (500ml)</h4><p>Shahi paneer gravy served with aromatic rice.</p><div class="food-price">₹280/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Kadhi Chawal (500ml)</h4><p>Tangy Punjabi kadhi pakoda served with rice.</p><div class="food-price">₹260/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Chole Chawal (500ml)</h4><p>Spicy North Indian chole served with steamed rice.</p><div class="food-price">₹260/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Dal Makhani + Butter Naan</h4><p>300ml Dal Makhani served with 2 Butter Naans.</p><div class="food-price">₹350/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Shahi Paneer + Butter Naan</h4><p>300ml Shahi Paneer served with 2 Butter Naans.</p><div class="food-price">₹380/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Devrana Thali</h4><p>Paneer curry, Dal Makhani, Mix Veg, Rice, Lachha Paratha (2pcs), Salad, Raita & Gulab Jamun.</p><div class="food-price">₹340/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Executive Thali</h4><p>Paneer curry, Dal Makhani, Rice, Tandoori Butter Roti (2pcs), Salad & Raita.</p><div class="food-price">₹310/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+        </div>
+
+        <!-- 12. SOUTH INDIAN SE -->
+        <div id="cat-south" class="menu-category-title">South Indian Se</div>
+        <div class="food-list">
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Plain Dosa</h4><p>Classic crispy dosa served with sambar & chutney.</p><div class="food-price">₹160/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Special Masala Dosa</h4><p>Large crispy dosa filled with spiced potato masala.</p><div class="food-price">₹250/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Plain Rawa Dosa</h4><p>Thin crispy semolina crepe with sambar & chutney.</p><div class="food-price">₹160/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Rawa Masala Dosa</h4><p>Crispy rawa dosa stuffed with potato filling.</p><div class="food-price">₹220/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Onion Rawa Masala Dosa</h4><p>Rawa dosa topped with onions and stuffed with potato masala.</p><div class="food-price">₹230/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Paneer Masala Dosa</h4><p>Crispy dosa stuffed with spiced cottage cheese.</p><div class="food-price">₹250/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Tomato Uttapam</h4><p>Thick soft pancake topped with juicy fresh tomatoes.</p><div class="food-price">₹150/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Onion Uttapam</h4><p>Fluffy uttapam topped with onions & green chillies.</p><div class="food-price">₹150/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Mix Veg Uttapam</h4><p>Uttapam topped with assorted vegetables and spices.</p><div class="food-price">₹160/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Idli Sambhar</h4><p>Steamed soft rice cakes served with hot sambar.</p><div class="food-price">₹150/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Vada Sambhar</h4><p>Crispy lentil vadas soaked in piping hot sambar.</p><div class="food-price">₹160/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>South Indian Platter</h4><p>Selection of 2 idlis, 1 vada, mix veg uttapam & special masala dosa.</p><div class="food-price">₹400/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+        </div>
+
+        <!-- 13. BREADS, PARATHA & KULCHA -->
+        <div id="cat-breads" class="menu-category-title">Breads, Paratha & Kulcha</div>
+        <div class="food-list">
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Tandoori Roti</h4><p>Whole wheat flatbread baked in clay tandoor.</p><div class="food-price">Plain: ₹40 | Butter: ₹45</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Naan Varieties</h4><p>Soft tandoori naan options.</p><div class="food-price">Plain: ₹60 | Butter: ₹65 | Garlic: ₹70</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Stuffed Naan</h4><p>Naan stuffed with spiced potato and paneer filling.</p><div class="food-price">₹100/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Missi Roti</h4><p>Gram flour flatbread flavored with spices.</p><div class="food-price">₹80/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Lachha Paratha</h4><p>Multi-layered crispy tandoori paratha.</p><div class="food-price">₹70/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Tawa Paratha (Set of 2)</h4><p>Home-style tawa cooked layered parathas.</p><div class="food-price">₹100/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Green Chilli Paratha</h4><p>Spicy paratha stuffed with green chilies.</p><div class="food-price">₹80/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Stuffed Paratha Options</h4><p>Aloo: ₹180 | Onion: ₹180 | Mix: ₹200 | Paneer: ₹250</p><div class="food-price">From ₹180/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Aloo Kulcha & Chole</h4><p>2 Aloo Kulchas served with 300ml Chole.</p><div class="food-price">₹350/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Onion Kulcha & Chole</h4><p>2 Onion Kulchas served with 300ml Chole.</p><div class="food-price">₹350/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Onion + Aloo Kulcha & Chole</h4><p>1 Aloo & 1 Onion Kulcha served with 300ml Chole.</p><div class="food-price">₹350/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+            <div class="food-item">
+                <div class="food-info">
+                    <h4>Paneer Kulcha & Chole</h4><p>2 Paneer Kulchas served with 300ml Chole.</p><div class="food-price">₹380/-</div>
+                </div><div class="add-btn">Add</div>
+            </div>
+        </div>
+
+        <div style="height: 30px;"></div>
+    </div>
+
+    <div id="page-offers" class="page">
+        <div class="menu-header">
+            <h2>Special Offers</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Exclusive dining deals at Devrana Express Siwan</p>
+        </div>
+        <div style="padding: 10px 20px;">
+            <div class="offer-card">
+                <h3><i class="fas fa-utensils"></i> Family Dining Special</h3>
+                <p>Enjoy our Devrana Thali or Executive Thali at special discounted rates! Complete meal solutions for your family.</p>
+            </div>
+            <div class="offer-card">
+                <h3><i class="fas fa-percentage"></i> Mall Visitors Offer</h3>
+                <p>Visiting Downtown City Square Mall? Stop by 2nd Floor and get instant discounts on group meal combos!</p>
+            </div>
+            <div class="offer-card">
+                <h3><i class="fab fa-whatsapp" style="color: #25D366;"></i> WhatsApp Table Booking</h3>
+                <p>Pre-book your table on WhatsApp and enjoy priority seating with zero waiting time!</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-about" class="page">
+        <div class="menu-header">
+            <h2>About Devrana Express</h2>
+        </div>
+        <div style="padding: 10px 20px;">
+            <div class="about-card">
+                <h3>Devrana Express Siwan</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 12px;">
+                    Welcome to <strong>Devrana Express</strong> (देवरानी एक्सप्रेस सीवान), Siwan's leading dining destination located inside Downtown City Square Mall. We offer a clean, spacious ambience and a massive variety of delicious pure vegetarian dishes ranging from North Indian to Tandoor, Desi Chinese, and South Indian delights.
+                </p>
+                <div style="border-top: 1px solid var(--card-border); padding-top: 12px; margin-top: 10px;">
+                    <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 6px;">
+                        <strong><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Address:</strong><br>
+                        2nd Floor, Tarwara More, Downtown City Square Mall, Siwan, Bihar 841226
+                    </p>
+                    <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 6px;">
+                        <strong><i class="fas fa-phone-alt" style="color: var(--primary);"></i> Contact:</strong> +91 088099 85776
+                    </p>
+                    <p style="font-size: 0.85rem; color: #cbd5e1;">
+                        <strong><i class="fas fa-clock" style="color: var(--primary);"></i> Hours:</strong> Daily Open (Closes 11:00 PM)
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-item active" id="nav-home" onclick="switchPage('page-home', this)">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </div>
+        <div class="nav-item" id="nav-menu" onclick="switchPage('page-menu', this)">
+            <i class="fas fa-book-open"></i>
+            <span>Menu</span>
+        </div>
+        <div class="nav-item" id="nav-offers" onclick="switchPage('page-offers', this)">
+            <i class="fas fa-tags"></i>
+            <span>Offers</span>
+        </div>
+        <div class="nav-item" id="nav-about" onclick="switchPage('page-about', this)">
+            <i class="fas fa-info-circle"></i>
+            <span>About</span>
+        </div>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        window.onload = function() {
+            new Swiper('.home-swiper', {
+                loop: true,
+                autoplay: { 
+                    delay: 3500, 
+                    disableOnInteraction: false 
+                },
+                pagination: { 
+                    el: '.swiper-pagination', 
+                    clickable: true 
+                }
+            });
+        };
+
+        function switchPage(pageId, clickedNav) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            if(clickedNav) {
+                clickedNav.classList.add('active');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function scrollToCategory(catId, chipElem) {
+            document.querySelectorAll('.cat-chip').forEach(chip => chip.classList.remove('active'));
+            if (chipElem) {
+                chipElem.classList.add('active');
+            }
+            
+            const element = document.getElementById(catId);
+            if (element) {
+                const headerOffset = 135;
+                const elementPosition = element.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }
+        }
+
+        document.querySelectorAll('.add-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const originalText = this.innerHTML;
+                this.innerHTML = "Added <i class='fas fa-check'></i>";
+                this.style.background = "var(--primary)";
+                this.style.color = "#000";
+                
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.style.background = "rgba(255, 179, 0, 0.12)";
+                    this.style.color = "var(--primary)";
+                }, 1800);
+            });
+        });
+    </script>
+</body>
+                  </html>
